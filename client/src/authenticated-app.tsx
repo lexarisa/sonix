@@ -9,7 +9,7 @@ import { getMyProfile } from './services/userAPI';
 import { setUserProfile, logout } from './state/actions';
 
 //! views/components/data
-import Layout from './views/auth-layout.tsx';
+import Layout from './views/auth-layout';
 import Dashboard from './views/dashboard';
 import Recipe from './views/recipe';
 import CreateRecipe from './views/create-recipe';
