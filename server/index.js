@@ -22,6 +22,7 @@ const corsConfig = {
 //hide the x-powered-by express in response header
 app.disable('x-powered-by');
 
+
 // add the middleware
 app.use(cors(corsConfig));
 app.use(morgan('short'));
