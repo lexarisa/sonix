@@ -67,6 +67,8 @@ const CreateRecipe = () => {
   //! submit the form to firebase/server
   const onSubmit = async (data: FormConstructorRecipeInterface) => {
     //make the document to store
+
+    console.log('data', data);
     const file: any = data.sampleFile[0];
 
     // check the file is type mp3 or wav
@@ -144,6 +146,7 @@ const CreateRecipe = () => {
         <div className="recipe-section recipe-details">
           <h2>Recipe Details</h2>
           <input
+          // data-input=
             type="text"
             {...register('title')}
             placeholder="title"

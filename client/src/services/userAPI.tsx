@@ -12,15 +12,13 @@ const createUser = async (newUser: UserSignInInterface) => {
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newUser),
-  })
-    .then((res) => {
-      const data = res.json();
-      if (res.status >= 400) {
-        return Promise.reject(data); //ERROR
-      }
-      return data;
-    })
-    .catch((err) => console.error(err));
+  }).then((res) => {
+    const data = res.json();
+    if (res.status >= 400) {
+      return Promise.reject(data); //ERROR
+    }
+    return data;
+  });
 };
 
 const loginUser = async (user: { email: string; password: string }) => {

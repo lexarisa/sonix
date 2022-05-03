@@ -11,6 +11,7 @@ import {
 } from '../../state/actions';
 
 //! styles and assets
+import './styles/recipe-preview.scss';
 import PlayIcon from './../../assests/icons/play.svg';
 import PauseIcon from './../../assests/icons/pause.svg';
 import Fav from '../../assests/icons/fav.svg';
@@ -20,7 +21,6 @@ import User from '../../assests/icons/signup.svg';
 import Liked from '../../assests/icons/unfav-dark.svg';
 import { CategoryInterface } from '../../interfaces/CategoryInterface';
 import './styles/recipe-preview.scss';
-
 
 type RecipePreviewProps = {
   recipe: CategoryInterface;

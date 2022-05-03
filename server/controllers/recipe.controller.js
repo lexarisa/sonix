@@ -157,11 +157,15 @@ const createRecipe = async (req, res) => {
   console.log('REQUEST CONTROLLERS',req.body);
   const user = req.user;
   const recipe = req.body;
+
+  console.log(recipe);
   recipe.creatorId = user._id;
   recipe.creatorHandle = user.handle;
   try {
     // save the new recipe
+    console.log('hello');
     const result = await Recipe.create(recipe);
+    console.log('databeingcreated', result);
     // .select('_id creatorHandle title numberOfLikes description rating category originalSynth preview');
     if (!result) {
       throw new Error('Could not add recipe to database');
