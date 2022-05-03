@@ -1,11 +1,13 @@
 // import models
-const Recipe = require('../models/recipe.model');
-const User = require('../models/user.model');
-const { categories } = require('../models/category.model');
-const { Console } = require('console');
+import Recipe from '../models/recipe.model';
+import User from '../models/user.model';
+import categories from '../models/category.model';
+import { CustomRequest } from '../types/user.types';
+import { Request, Response } from 'express';
+import { RecipeResultsType, RecipeType } from '../types/user.types';
 
 // search all recipes
-const searchAllRecipes = async (req, res) => {
+const searchAllRecipes = async (req: Request, res: Response) => {
   // get the search term
   const { searchTerm } = req.params;
   const regex = new RegExp(searchTerm, 'i');
@@ -29,7 +31,7 @@ const searchAllRecipes = async (req, res) => {
 };
 
 // get a users recipes
-const getUserRecipes = async (req, res) => {
+const getUserRecipes = async (req: Request, res: Response) => {
   const { own, liked } = req.body;
   try {
     //get own recipes
@@ -52,10 +54,13 @@ const getUserRecipes = async (req, res) => {
 };
 
 // get recipes for dashboard
-const getDashBoardRecipes = async (req, res) => {
+const getDashBoardRecipes = async (req: Request, res: Response) => {
   //create an object ot store the results
-  const results = {};
+
   try {
+    let results: RecipeResultsType = {
+      Popular: [],
+    };
     // get popular recipes - sort by rating
     results.Popular = await Recipe.find({})
       .sort({ numberOfLikes: -1 })
@@ -65,14 +70,15 @@ const getDashBoardRecipes = async (req, res) => {
       );
 
     // get category recipes
-    for (const cat of categories) {
+
+    categories.forEach(async (cat: string) => {
       results[cat] = await Recipe.find({ category: cat })
         .sort({ numberOfLikes: -1 })
         .limit(10)
         .select(
           '_id creatorHandle title numberOfLikes description category originalSynth preview'
         );
-    }
+    });
 
     // return the result to the user
     res.status(200).send(results);
@@ -82,7 +88,7 @@ const getDashBoardRecipes = async (req, res) => {
 };
 
 // get recipes by category
-const getCategoryRecipes = async (req, res) => {
+const getCategoryRecipes = async (req: Request, res: Response) => {
   //get the category name
   const { categoryName } = req.params;
 
@@ -107,7 +113,7 @@ const getCategoryRecipes = async (req, res) => {
     }
 
     //if asking for anything else check the category exists
-    if (!categories.includes(categoryName)) throw new Error(1);
+    if (!categories.includes(categoryName)) throw new Error('1');
     //get category recipes - ordered by rating
     const results = await Recipe.find({ category: categoryName })
       .sort({ numberOfLikes: -1 })
@@ -130,14 +136,14 @@ const getCategoryRecipes = async (req, res) => {
 };
 
 // get a single recipe
-const getRecipe = async (req, res) => {
+const getRecipe = async (req: Request, res: Response) => {
   // get the recipe id from the req params
   const { id } = req.params;
 
   try {
     //check the recipe exists
     const recipe = await Recipe.findById(id);
-    if (!recipe) throw new Error(1);
+    if (!recipe) throw new Error('1');
 
     res.status(200).send(recipe);
   } catch (error) {
@@ -152,20 +158,19 @@ const getRecipe = async (req, res) => {
 };
 
 // create a new recipe
-const createRecipe = async (req, res) => {
+const createRecipe = async (req: Request, res: Response) => {
   // get the recipe from the request body, creator details from req.user
-  console.log('REQUEST CONTROLLERS',req.body);
-  const user = req.user;
+
+  const user = res.locals.user;
   const recipe = req.body;
 
-  console.log(recipe);
   recipe.creatorId = user._id;
   recipe.creatorHandle = user.handle;
   try {
     // save the new recipe
-    console.log('hello');
+
     const result = await Recipe.create(recipe);
-    console.log('databeingcreated', result);
+
     // .select('_id creatorHandle title numberOfLikes description rating category originalSynth preview');
     if (!result) {
       throw new Error('Could not add recipe to database');
@@ -182,7 +187,7 @@ const createRecipe = async (req, res) => {
       originalSynth,
       preview,
     } = result;
-    console.log('Result in controller',result);
+
     const returnRecipe = {
       _id,
       creatorHandle,
@@ -208,19 +213,19 @@ const createRecipe = async (req, res) => {
 };
 
 // like a recipe
-const likeRecipe = async (req, res) => {
+const likeRecipe = async (req: Request, res: Response) => {
   // get user and recipe ids
-  const userId = req.user._id;
+  const userId = res.locals.user._id;
   const { recipeId } = req.params;
   // adjust the number of likes
   try {
     // check the user and recipe exists
     const recipeToUpdate = await Recipe.findById(recipeId);
     const userToUpdate = await User.findById(userId);
-    if (!recipeToUpdate || !userToUpdate) throw new Error(1);
+    if (!recipeToUpdate || !userToUpdate) throw new Error('1');
 
     // check use has not already liked this recipe
-    if (userToUpdate.likedRecipes.includes(recipeId)) throw new Error(2);
+    if (userToUpdate.likedRecipes.includes(recipeId)) throw new Error('2');
 
     // add the recipe to the users likedRecipes
     userToUpdate.likedRecipes.push(recipeId);
@@ -247,9 +252,9 @@ const likeRecipe = async (req, res) => {
 };
 
 // unlike a recipe
-const unLikeRecipe = async (req, res) => {
+const unLikeRecipe = async (req: Request, res: Response) => {
   // get user and recipe ids
-  const userId = req.user._id;
+  const userId = res.locals.user._id;
   const { recipeId } = req.params;
   console.log('user: ', userId, 'recipeId: ', recipeId);
 
@@ -258,21 +263,21 @@ const unLikeRecipe = async (req, res) => {
     // check the user and recipe exists
     const recipeToUpdate = await Recipe.findById(recipeId);
     const userToUpdate = await User.findById(userId);
-    if (!recipeToUpdate || !userToUpdate) throw new Error(1);
+    if (!recipeToUpdate || !userToUpdate) throw new Error('1');
 
     // check use has already liked this recipe
-    if (!userToUpdate.likedRecipes.includes(recipeId)) throw new Error(2);
+    if (!userToUpdate.likedRecipes.includes(recipeId)) throw new Error('2');
 
     // remove the recipe from the users likedRecipes
     userToUpdate.likedRecipes = userToUpdate.likedRecipes.filter(
-      (id) => id !== recipeId
+      (id: string) => id !== recipeId
     );
     await userToUpdate.save();
 
     // decrement number of likes and add user to recipe likedBy
     recipeToUpdate.numberOfLikes--;
     recipeToUpdate.likedBy = recipeToUpdate.likedBy.filter(
-      (id) => id !== userId
+      (id: string) => id !== userId
     );
     const result = await recipeToUpdate.save();
 
@@ -292,7 +297,7 @@ const unLikeRecipe = async (req, res) => {
 };
 
 //! delete a recipe
-const deleteRecipe = async (req, res) => {
+const deleteRecipe = async (req: Request, res: Response) => {
   //todo - get the userId from the auth middleware
   // get the recipe id and user id from the req body
   const { recipeId, userId } = req.body;
@@ -308,7 +313,7 @@ const deleteRecipe = async (req, res) => {
     // delete the recipe from the user ownRecipes array
     const recipeCreator = await User.findById(userId);
     recipeCreator.ownRecipes = recipeCreator.ownRecipes.filter(
-      (recipe) => recipe.toString() !== recipeId
+      (recipe: RecipeType) => recipe.toString() !== recipeId
     );
     await recipeCreator.save();
 
@@ -316,7 +321,7 @@ const deleteRecipe = async (req, res) => {
     for (const userId of recipeToDelete.likedBy) {
       const user = await User.findById(userId);
       user.likedRecipes = user.likedRecipes.filter(
-        (recipe) => recipe !== recipeId
+        (recipe: RecipeType) => recipe !== recipeId
       );
       await user.save();
     }
@@ -338,7 +343,7 @@ const deleteRecipe = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   searchAllRecipes,
   getDashBoardRecipes,
   getCategoryRecipes,

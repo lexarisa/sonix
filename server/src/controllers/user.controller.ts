@@ -1,15 +1,18 @@
 // imports
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { Request, Response } from 'express';
+import { CustomRequest } from '../types/user.types';
+import { LikedObjectType } from '../types/user.types';
 
 // import models
-const User = require('../models/user.model');
+import User from '../models/user.model';
 
 // import the token secret
-const SECRET = process.env.SECRET;
+const SECRET = process.env.SECRET || '';
 
 //! user controller methods
-const createUser = async (req, res) => {
+const createUser = async (req: Request, res: Response) => {
   // get the info from the request body
   const { firstName, lastName, password, email, handle, bio } = req.body;
 
@@ -36,7 +39,7 @@ const createUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (req: Request, res: Response) => {
   // get the email and password
   const { email, password } = req.body;
 
@@ -49,7 +52,6 @@ const loginUser = async (req, res) => {
     //compare passwords
     const authorized = await bcrypt.compare(password, user.password);
 
-    console.log('authorized', authorized);
     if (!authorized) throw new Error('Invalid credentials');
     // create a new token
 
@@ -58,14 +60,13 @@ const loginUser = async (req, res) => {
 
     res.status(200).send({ token });
   } catch (error) {
-    console.log('loggggg', error);
     res.status(401).send({ error, message: 'Invalid credentials!' });
   }
 };
 
 // get user profile of logged in user
-const getMyProfile = async (req, res) => {
-  const { _id } = req.user;
+const getMyProfile = async (req: Request, res: Response) => {
+  const { _id } = res.locals.user;
 
   try {
     const profile = await User.findById({ _id })
@@ -73,8 +74,8 @@ const getMyProfile = async (req, res) => {
       .select('_id handle bio ownRecipes likedRecipes joined');
 
     if (profile) {
-      const likedObject = {};
-      profile.likedRecipes.forEach((id) => {
+      const likedObject: LikedObjectType = {};
+      profile.likedRecipes.forEach((id: string) => {
         likedObject[id] = true;
       });
       profile.likedRecipes = likedObject;
@@ -87,7 +88,7 @@ const getMyProfile = async (req, res) => {
   }
 };
 
-const getUserProfile = async (req, res) => {
+const getUserProfile = async (req: Request, res: Response) => {
   // get the user profile id
   const { userHandle } = req.params;
 
@@ -98,7 +99,6 @@ const getUserProfile = async (req, res) => {
       handle: userHandle,
     });
     if (!_id) throw new Error('User profile not found');
-    console.log('user: ', handle, _id);
 
     // create the user profile
     const profile = { _id, handle, bio, ownRecipes, likedRecipes };
@@ -110,11 +110,11 @@ const getUserProfile = async (req, res) => {
 };
 
 // todo - do this later if time
-const editUserProfile = async (req, res) => {
+const editUserProfile = async (req: Request, res: Response) => {
   //get user id and body
-  const { _id } = req.user;
+  const { _id } = res.locals.user;
   const { bio } = req.body;
-  // console.log('updating: ', _id, bio);
+
   // find one and update
   try {
     const result = await User.findOneAndUpdate(
@@ -122,7 +122,7 @@ const editUserProfile = async (req, res) => {
       { bio: bio },
       { new: true }
     );
-    console.log(result);
+
     return res.status(200).send(result);
   } catch (error) {
     // console.error('my error', error);
@@ -130,10 +130,4 @@ const editUserProfile = async (req, res) => {
   }
 };
 
-module.exports = {
-  createUser,
-  loginUser,
-  getUserProfile,
-  editUserProfile,
-  getMyProfile,
-};
+export { createUser, loginUser, getUserProfile, editUserProfile, getMyProfile };

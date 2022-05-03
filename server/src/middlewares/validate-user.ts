@@ -1,9 +1,20 @@
-const jwt = require('jsonwebtoken');
-const User = require('./../models/user.model');
-const SECRET = process.env.SECRET;
+import jwt from 'jsonwebtoken';
+import User from './../models/user.model';
+import { Request, Response, NextFunction } from 'express';
+import { CustomRequest, UserTypes } from '../types/user.types';
+const SECRET = process.env.SECRET || '';
 
-const validateUser = async (req, res, next) => {
+interface JwtPayload {
+  _id: string;
+}
+
+const validateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // extract token from auth headers
+
   const authHeaders = req.headers['authorization'];
 
   if (!authHeaders) {
@@ -12,15 +23,15 @@ const validateUser = async (req, res, next) => {
   const token = authHeaders.split(' ')[1];
   try {
     // verify & decode token payload,
-    const { _id } = jwt.verify(token, SECRET);
+    const { _id } = jwt.verify(token, SECRET) as JwtPayload;
     // attempt to find user object and set to req
     const user = await User.findById({ _id });
     if (!user) return res.status(401).send({ message: 'User not found' });
-    req.user = user;
+    res.locals.user = user;
     next();
   } catch (error) {
     res.sendStatus(401);
   }
 };
 
-module.exports = validateUser;
+export default validateUser;

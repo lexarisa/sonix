@@ -1,18 +1,18 @@
 //imports
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const validateUser = require('./middlewares/validate-user');
+import validateUser from './middlewares/validate-user';
 
 //import the controller methods
-const {
+import {
   createUser,
   loginUser,
   getUserProfile,
   editUserProfile,
-  getMyProfile
-} = require('./controllers/user.controller');
+  getMyProfile,
+} from './controllers/user.controller';
 
-const {
+import {
   searchAllRecipes,
   getDashBoardRecipes,
   getCategoryRecipes,
@@ -21,8 +21,8 @@ const {
   likeRecipe,
   unLikeRecipe,
   deleteRecipe,
-  getUserRecipes
-} = require('./controllers/recipe.controller');
+  getUserRecipes,
+} from './controllers/recipe.controller';
 
 //! unauthenticated routes
 // recipes
@@ -49,5 +49,4 @@ router.delete('/recipe/delete', validateUser, deleteRecipe);
 router.patch('/profile/edit', validateUser, editUserProfile);
 
 //export the router
-module.exports = router;
-
+export default router;
