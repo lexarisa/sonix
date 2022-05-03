@@ -68,7 +68,6 @@ const CreateRecipe = () => {
   const onSubmit = async (data: FormConstructorRecipeInterface) => {
     //make the document to store
 
-    console.log('data', data);
     const file: any = data.sampleFile[0];
 
     // check the file is type mp3 or wav
@@ -136,17 +135,20 @@ const CreateRecipe = () => {
         console.log(err.message);
         setResultMessage('Failed to upload recipe to database!');
       });
-
   };
 
   return (
     <div className="create-recipe-wrapper">
-      <form className="create-form" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="create-form"
+        title="create-form"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         {/* details */}
         <div className="recipe-section recipe-details">
           <h2>Recipe Details</h2>
           <input
-          // data-input=
+            // data-input=
             type="text"
             {...register('title')}
             placeholder="title"

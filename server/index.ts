@@ -1,10 +1,10 @@
 // imports
 require('dotenv').config();
-const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
-const router = require('./router');
-const { mongoose, dbUrl } = require('./models/connection');
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
+import router from './src/router';
+import { mongoose, dbUrl } from './src/models/connection';
 import { Request, Response, Express } from 'express';
 
 // init the hostname and port
