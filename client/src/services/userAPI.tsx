@@ -12,14 +12,15 @@ const createUser = async (newUser: UserSignInInterface) => {
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newUser),
-  }).then((res) => {
-    const data = res.json();
-    if (res.status >= 400) {
-      return Promise.reject(data); //ERROR
-    }
-    return data;
-  });
-
+  })
+    .then((res) => {
+      const data = res.json();
+      if (res.status >= 400) {
+        return Promise.reject(data); //ERROR
+      }
+      return data;
+    })
+    .catch((err) => console.error(err));
 };
 
 const loginUser = async (user: { email: string; password: string }) => {
@@ -32,11 +33,16 @@ const loginUser = async (user: { email: string; password: string }) => {
   })
     .then((res) => (res.status >= 400 ? Promise.reject(res) : res))
     .then((res) => {
-      const data = res.json();
-      return data;
+      console.log('AUTH RES', res);
+      return res.json();
+    })
+    .then((data) => {
+      // if (res.status==200) return {authenticated:true,data} ;
+      // else return {authenticated:false,data};
+      return { authenticated: true, data };
     })
     .catch((error) => {
-      console.error(error);
+      // console.error(error);
       return error;
     });
 };
@@ -54,7 +60,7 @@ const getMyProfile = async () => {
     .then((res) => (res.status >= 400 ? Promise.reject(res) : res))
     .then((res) => res.json())
     .catch((error) => {
-      console.error('Failed to create recipe: ', error);
+      // console.error('Failed get profile: ', error);
       return error;
     });
 };

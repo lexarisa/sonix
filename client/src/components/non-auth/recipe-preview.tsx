@@ -19,6 +19,7 @@ import Piano from '../../assests/icons/piano.svg';
 import User from '../../assests/icons/signup.svg';
 import Liked from '../../assests/icons/unfav-dark.svg';
 import { CategoryInterface } from '../../interfaces/CategoryInterface';
+import './styles/recipe-preview.scss';
 
 
 type RecipePreviewProps = {
