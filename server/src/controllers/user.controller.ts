@@ -32,9 +32,10 @@ const createUser = async (req: Request, res: Response) => {
     });
     // create a new token and send to the user
     const token = jwt.sign({ _id }, SECRET);
-    res.status(201).send({ token });
+    return res.status(201).send({ token });
   } catch (error) {
     res.status(400).send({ error, message: 'Could not create the user' });
+    console.log(error);
   }
 };
 
