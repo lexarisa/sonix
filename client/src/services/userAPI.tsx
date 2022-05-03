@@ -31,12 +31,16 @@ const loginUser = async (user: { email: string; password: string }) => {
   })
     .then((res) => (res.status >= 400 ? Promise.reject(res) : res))
     .then((res) => {
-      console.log('res', res);
-      const data = res.json();
-      return data;
+      console.log('AUTH RES', res);
+      return res.json();
+    })
+    .then((data) => {
+      // if (res.status==200) return {authenticated:true,data} ;
+      // else return {authenticated:false,data};
+      return { authenticated: true, data };
     })
     .catch((error) => {
-      console.error(error);
+      // console.error(error);
       return error;
     });
 };
@@ -54,7 +58,7 @@ const getMyProfile = async () => {
     .then((res) => (res.status >= 400 ? Promise.reject(res) : res))
     .then((res) => res.json())
     .catch((error) => {
-      console.error('Failed to create recipe: ', error);
+      // console.error('Failed get profile: ', error);
       return error;
     });
 };

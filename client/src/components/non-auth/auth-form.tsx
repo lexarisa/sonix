@@ -33,19 +33,22 @@ const AuthForm: React.FC<Props> = ({ title, type }) => {
     };
 
     if (user.email && user.password) {
-      // log user in
-      const loggedIn = await loginUser(user);
-      if (loggedIn) {
-        //store the token in localstorage
-        localStorage.setItem('accessToken', loggedIn.token);
-        //set state in store
-        dispatch(login());
-        navigate('/');
-      } else {
-        //display error message
-        setLoginMessage('loggedIn.error.message');
-        e.currentTarget.email.value = '';
-      }
+      loginUser(user)
+        .then((res) => {
+          console.log('RES', res);
+          if (res.authenticated) {
+            console.log('LOGGED IN', res);
+            localStorage.setItem('accessToken', res.data.token);
+            dispatch(login());
+            navigate('/');
+          } else {
+            setLoginMessage('incorrect email or password');
+            console.log('error');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
 
@@ -71,7 +74,6 @@ const AuthForm: React.FC<Props> = ({ title, type }) => {
       const userCreated = await createUser(user);
 
       //store the token in localstorage
-      console.log('UserCreated', userCreated);
       localStorage.setItem('accessToken', userCreated.token);
       //set state in store
       dispatch(login());
