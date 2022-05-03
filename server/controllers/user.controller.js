@@ -12,7 +12,7 @@ const SECRET = process.env.SECRET;
 const createUser = async (req, res) => {
   // get the info from the request body
   const { firstName, lastName, password, email, handle, bio } = req.body;
-  console.log('REQ BODY', req.body);
+
   try {
     // check the password is not empty
     if (password === '') throw new Error('password is empty');
@@ -29,21 +29,21 @@ const createUser = async (req, res) => {
     });
     // create a new token and send to the user
     const token = jwt.sign({ _id }, SECRET);
-    res.status(201).send({ token });
+    return res.status(201).send({ token });
   } catch (error) {
     res.status(400).send({ error, message: 'Could not create the user' });
+    console.log(error);
   }
 };
 
 const loginUser = async (req, res) => {
   // get the email and password
   const { email, password } = req.body;
-  console.log('req', req.body);
+
   try {
     //get the user from db
     const user = await User.findOne({ email });
 
-    console.log('user', user);
     //check user exists
     if (!user) throw new Error('Invalid credentials');
     //compare passwords
@@ -111,7 +111,7 @@ const getUserProfile = async (req, res) => {
 
 // todo - do this later if time
 const editUserProfile = async (req, res) => {
-  //get ueer id and body
+  //get user id and body
   const { _id } = req.user;
   const { bio } = req.body;
   // console.log('updating: ', _id, bio);
