@@ -1,4 +1,3 @@
-import { RecipeInterface } from '../interfaces/RecipeInterface';
 import { FormRecipeInterface } from '../interfaces/FormRecipeInterface';
 
 const rootUrl = 'http://localhost:3001';
@@ -80,28 +79,32 @@ const unlikeRecipe = (recipeId: string) => {
 //! post requests
 const createRecipe = (recipe: FormRecipeInterface) => {
   const token = localStorage.getItem('accessToken');
-  return fetch(`${rootUrl}/recipe/create`, {
-    method: 'POST',
-    credentials: 'include',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(recipe),
-  })
-    .then((res) => (res.status > 400 ? Promise.reject(res) : res))
-    .then((res) => res.json())
-    // .then((res) => {
-    //   console.log('RES DATA IN API', res);
-    //   return { created: true, data: res }
-    //   // if (res.status === 201) return { created: true, data: res };
-    //   // else return { created: false, error: res };
-    // })
-    .catch((error) => {
-      console.error('Failed to create recipe: ', error);
-      return error;
-    });
+  console.log('recipe', recipe);
+  return (
+    fetch(`${rootUrl}/recipe/create`, {
+      method: 'POST',
+      credentials: 'include',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(recipe),
+    })
+      .then((res) => (res.status > 400 ? Promise.reject(res) : res))
+      .then((res) => res.json())
+      // .then((res) => {
+      //   console.log('RES DATA IN API', res);
+      //   return { created: true, data: res }
+      //   // if (res.status === 201) return { created: true, data: res };
+      //   // else return { created: false, error: res };
+      // })
+      .catch((error) => {
+        console.log('error caught');
+        console.error('Failed to create recipe: ', error);
+        return error;
+      })
+  );
 };
 
 const getProfileRecipes = (recipeIds: { own: string[]; liked: string[] }) => {

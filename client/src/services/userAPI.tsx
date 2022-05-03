@@ -19,7 +19,6 @@ const createUser = async (newUser: UserSignInInterface) => {
     }
     return data;
   });
-
 };
 
 const loginUser = async (user: { email: string; password: string }) => {
@@ -32,6 +31,7 @@ const loginUser = async (user: { email: string; password: string }) => {
   })
     .then((res) => (res.status >= 400 ? Promise.reject(res) : res))
     .then((res) => {
+      console.log('res', res);
       const data = res.json();
       return data;
     })

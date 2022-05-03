@@ -14,7 +14,6 @@ import { FormConstructorRecipeInterface } from '../interfaces/FormRecipeInterfac
 
 import './styles/create-recipe.scss';
 
-
 const CreateRecipe = () => {
   //store / state / navigation
   const dispatch = useDispatch();
@@ -68,6 +67,8 @@ const CreateRecipe = () => {
   //! submit the form to firebase/server
   const onSubmit = async (data: FormConstructorRecipeInterface) => {
     //make the document to store
+
+    console.log('data', data);
     const file: any = data.sampleFile[0];
 
     // check the file is type mp3 or wav
@@ -121,9 +122,9 @@ const CreateRecipe = () => {
 
     createRecipe(recipe)
       .then((res) => {
-        console.log('RES',res);
+        console.log('RES', res);
         if (res) {
-          console.log('RES IN CREATE REC',res);
+          console.log('RES IN CREATE REC', res);
           setResultMessage('Uploaded recipe to database.');
           return res;
         } else throw new Error(res.error.message);
@@ -132,7 +133,6 @@ const CreateRecipe = () => {
         dispatch(storeRecipe(res, data.category));
         dispatch(storeRecipeProfile(res._id));
         navigate('/recipe', { state: { recipeId: res._id } });
-
       })
       .catch((err) => {
         console.log(err.message);
@@ -167,6 +167,7 @@ const CreateRecipe = () => {
         <div className="recipe-section recipe-details">
           <h2>Recipe Details</h2>
           <input
+          data-input=
             type="text"
             {...register('title')}
             placeholder="title"

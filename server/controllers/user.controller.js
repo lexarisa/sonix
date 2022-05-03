@@ -43,11 +43,13 @@ const loginUser = async (req, res) => {
     //get the user from db
     const user = await User.findOne({ email });
 
+    console.log('user', user);
     //check user exists
     if (!user) throw new Error('Invalid credentials');
     //compare passwords
     const authorized = await bcrypt.compare(password, user.password);
 
+    console.log('authorized', authorized);
     if (!authorized) throw new Error('Invalid credentials');
     // create a new token
 
@@ -56,6 +58,7 @@ const loginUser = async (req, res) => {
 
     res.status(200).send({ token });
   } catch (error) {
+    console.log('loggggg', error);
     res.status(401).send({ error, message: 'Invalid credentials!' });
   }
 };
