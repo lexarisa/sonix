@@ -60,8 +60,6 @@ const dashboardRecipes = (recipes = {}, action: any) => {
 
   if (action.type === 'STORE_RECIPE') {
     const newDashboardRecipes = JSON.parse(JSON.stringify(recipes));
-    // console.log('newDashBoard', newDashboardRecipes);
-
     newDashboardRecipes[action.category]
       ? newDashboardRecipes[action.category].push(action.newRecipe)
       : (newDashboardRecipes[action.category] = [action.newRecipe]);
@@ -88,7 +86,6 @@ const dashboardRecipes = (recipes = {}, action: any) => {
           b.numberOfLikes - a.numberOfLikes
       );
     }
-
     newDashboardRecipes[action.category].sort(
       (a: RecipeInterface, b: RecipeInterface) =>
         b.numberOfLikes - a.numberOfLikes
