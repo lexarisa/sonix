@@ -41,10 +41,11 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
         // create a new token and send to the user
         const token = jsonwebtoken_1.default.sign({ _id }, SECRET);
-        res.status(201).send({ token });
+        return res.status(201).send({ token });
     }
     catch (error) {
         res.status(400).send({ error, message: 'Could not create the user' });
+        console.log(error);
     }
 });
 exports.createUser = createUser;

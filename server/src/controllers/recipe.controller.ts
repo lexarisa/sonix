@@ -2,7 +2,6 @@
 import Recipe from '../models/recipe.model';
 import User from '../models/user.model';
 import categories from '../models/category.model';
-import { CustomRequest } from '../types/user.types';
 import { Request, Response } from 'express';
 import { RecipeResultsType, RecipeType } from '../types/user.types';
 
@@ -56,7 +55,8 @@ const getUserRecipes = async (req: Request, res: Response) => {
 // get recipes for dashboard
 const getDashBoardRecipes = async (req: Request, res: Response) => {
   //create an object ot store the results
-
+  
+  
   try {
     let results: RecipeResultsType = {
       Popular: [],
@@ -70,21 +70,19 @@ const getDashBoardRecipes = async (req: Request, res: Response) => {
       );
 
     // get category recipes
-
-    categories.forEach(async (cat: string) => {
+    for (const cat of categories) {
       results[cat] = await Recipe.find({ category: cat })
         .sort({ numberOfLikes: -1 })
         .limit(10)
-        .select(
-          '_id creatorHandle title numberOfLikes description category originalSynth preview'
-        );
-    });
-
+        .select('_id creatorHandle title numberOfLikes description category originalSynth preview');
+    }
     // return the result to the user
-    res.status(200).send(results);
+   res.status(200).send(results);
+
   } catch (error) {
     res.status(500).send({ error, message: 'Failed to get recipes' });
   }
+ 
 };
 
 // get recipes by category
@@ -113,7 +111,7 @@ const getCategoryRecipes = async (req: Request, res: Response) => {
     }
 
     //if asking for anything else check the category exists
-    if (!categories.includes(categoryName)) throw new Error('1');
+    if (!categories.includes(categoryName)) throw new Error('1'); //!Error could be located here since only pop in dashboard
     //get category recipes - ordered by rating
     const results = await Recipe.find({ category: categoryName })
       .sort({ numberOfLikes: -1 })
@@ -163,7 +161,6 @@ const createRecipe = async (req: Request, res: Response) => {
 
   const user = res.locals.user;
   const recipe = req.body;
-
   recipe.creatorId = user._id;
   recipe.creatorHandle = user.handle;
   try {
