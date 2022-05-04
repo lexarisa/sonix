@@ -63,7 +63,7 @@ const dashboardRecipes = (recipes = {}, action:any) => {
 
   if (action.type === 'STORE_RECIPE') {
     const newDashboardRecipes = JSON.parse(JSON.stringify(recipes));
-    newDashboardRecipes[action.category].push(action.newRecipe);
+    newDashboardRecipes[action.category]?newDashboardRecipes[action.category].push(action.newRecipe):newDashboardRecipes[action.category]=[action.newRecipe];
     return newDashboardRecipes;
   }
 
@@ -86,7 +86,6 @@ const dashboardRecipes = (recipes = {}, action:any) => {
       );
       newDashboardRecipes['Popular'].sort((a:RecipeInterface, b:RecipeInterface) => b.numberOfLikes - a.numberOfLikes);
     }
-
     newDashboardRecipes[action.category].sort((a:RecipeInterface, b:RecipeInterface) => b.numberOfLikes - a.numberOfLikes);
     return newDashboardRecipes;
   }

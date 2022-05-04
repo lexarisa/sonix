@@ -12,7 +12,7 @@ const hostname = 'http://localhost';
 const port = process.env.PORT || 3001;
 
 // init the app
-const app: Express = express();
+const app : Express = express();
 
 //configure and add cors
 const corsConfig = {
@@ -25,9 +25,10 @@ app.disable('x-powered-by');
 
 // add the middleware
 app.use(cors(corsConfig));
-app.use(morgan('short'));
+// app.use(morgan('short'));
 app.use(express.json());
 app.use(router);
+
 
 //catch all requests not handled by router
 app.get('*', (req: Request, res: Response) => {
@@ -46,3 +47,4 @@ app.get('*', (req: Request, res: Response) => {
       console.error('Failed to connect to database', err.message);
   }
 })();
+module.exports=app;

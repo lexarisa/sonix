@@ -79,7 +79,6 @@ const unlikeRecipe = (recipeId: string) => {
 //! post requests
 const createRecipe = (recipe: FormRecipeInterface) => {
   const token = localStorage.getItem('accessToken');
-  console.log('recipe', recipe);
   return (
     fetch(`${rootUrl}/recipe/create`, {
       method: 'POST',
@@ -91,14 +90,8 @@ const createRecipe = (recipe: FormRecipeInterface) => {
       },
       body: JSON.stringify(recipe),
     })
-      .then((res) => (res.status > 400 ? Promise.reject(res) : res))
+      .then((res) => (res.status >= 400 ? Promise.reject(res) : res))
       .then((res) => res.json())
-      // .then((res) => {
-      //   console.log('RES DATA IN API', res);
-      //   return { created: true, data: res }
-      //   // if (res.status === 201) return { created: true, data: res };
-      //   // else return { created: false, error: res };
-      // })
       .catch((error) => {
         console.log('error caught');
         console.error('Failed to create recipe: ', error);

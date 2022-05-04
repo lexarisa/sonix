@@ -1,16 +1,19 @@
-const app = require('../app');
+const app = require('../dist/index');
 const request = require('supertest');
 const chance = require('chance').Chance();
-const { mongoose, dbUrl } = require('../models/connection');
+// const { dbUrl } = require('../dist/src/models/connection');
+// const mongoose=require('mongoose');
 
-describe('creates user', () => {
-  beforeEach(() => {
-    mongoose.connect(dbUrl);
-  });
+describe('creates user', (done) => {
+  // beforeEach(() => {
+  //   // mongoose.connect(dbUrl);
+  //   if (mongoose.connection.db) return done();
+  //   mongoose.connect(dbUrl);
+  // });
 
-  afterEach(() => {
-    mongoose.disconnect();
-  });
+  // afterEach(() => {
+  //   mongoose.disconnect();
+  // });
   it('returns status code 201 if valid new user is passed', async () => {
     const res = await request(app).post('/register').send({
       firstName: 'test',
