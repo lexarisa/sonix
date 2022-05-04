@@ -123,10 +123,9 @@ const CreateRecipe = () => {
         // } else throw new Error(res.error.message);
       })
       .then((res) => {
-        console.log('RES in create recipe',res);
         dispatch(storeRecipe(res, data.category)); //! THE ERROR IS HERE
-        console.log('RES2 in create recipe',res);
-        dispatch(storeRecipeProfile(res._id));  //! THE ERROR IS HERE
+
+        dispatch(storeRecipeProfile(res._id)); //! THE ERROR IS HERE
         navigate('/recipe', { state: { recipeId: res._id } });
       })
       .catch((err) => {

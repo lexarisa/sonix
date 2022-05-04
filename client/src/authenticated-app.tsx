@@ -40,7 +40,6 @@ const AuthenticatedApp = () => {
 
     getDashboardRecipes()
       .then((res) => {
-        console.log('res', res);
         dispatch(setDashboardRecipes(res));
       })
 

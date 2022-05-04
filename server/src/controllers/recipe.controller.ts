@@ -252,7 +252,6 @@ const unLikeRecipe = async (req: Request, res: Response) => {
   // get user and recipe ids
   const userId = res.locals.user._id;
   const { recipeId } = req.params;
-  console.log('user: ', userId, 'recipeId: ', recipeId);
 
   // adjust the number of likes
   try {

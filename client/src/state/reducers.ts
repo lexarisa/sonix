@@ -69,11 +69,13 @@ const dashboardRecipes = (recipes = {}, action: any) => {
   if (action.type === 'LIKE_DASHBOARD_RECIPE') {
     const newDashboardRecipes = JSON.parse(JSON.stringify(recipes));
     //handle category
-    newDashboardRecipes[action.category].map((recipe: RecipeInterface) => {
-      if (recipe._id === action.recipeId) {
-        recipe.numberOfLikes++;
-      }
-    });
+
+    newDashboardRecipes[action.category] &&
+      newDashboardRecipes[action.category].map((recipe: RecipeInterface) => {
+        if (recipe._id === action.recipeId) {
+          recipe.numberOfLikes++;
+        }
+      });
     //check if in popular also
     if (action.category !== 'Popular') {
       newDashboardRecipes['Popular'].map((recipe: RecipeInterface) => {
@@ -86,20 +88,23 @@ const dashboardRecipes = (recipes = {}, action: any) => {
           b.numberOfLikes - a.numberOfLikes
       );
     }
-    newDashboardRecipes[action.category].sort(
-      (a: RecipeInterface, b: RecipeInterface) =>
-        b.numberOfLikes - a.numberOfLikes
-    );
+    newDashboardRecipes[action.category] &&
+      newDashboardRecipes[action.category].sort(
+        (a: RecipeInterface, b: RecipeInterface) =>
+          b.numberOfLikes - a.numberOfLikes
+      );
     return newDashboardRecipes;
   }
 
   if (action.type === 'UNLIKE_DASHBOARD_RECIPE') {
     const newDashboardRecipes = JSON.parse(JSON.stringify(recipes));
-    newDashboardRecipes[action.category].map((recipe: RecipeInterface) => {
-      if (recipe._id === action.recipeId) {
-        recipe.numberOfLikes--;
-      }
-    });
+
+    newDashboardRecipes[action.category] &&
+      newDashboardRecipes[action.category].map((recipe: RecipeInterface) => {
+        if (recipe._id === action.recipeId) {
+          recipe.numberOfLikes--;
+        }
+      });
 
     if (action.category !== 'Popular') {
       newDashboardRecipes['Popular'].map((recipe: RecipeInterface) => {
@@ -113,10 +118,11 @@ const dashboardRecipes = (recipes = {}, action: any) => {
       );
     }
 
-    newDashboardRecipes[action.category].sort(
-      (a: RecipeInterface, b: RecipeInterface) =>
-        b.numberOfLikes - a.numberOfLikes
-    );
+    newDashboardRecipes[action.category] &&
+      newDashboardRecipes[action.category].sort(
+        (a: RecipeInterface, b: RecipeInterface) =>
+          b.numberOfLikes - a.numberOfLikes
+      );
     return newDashboardRecipes;
   }
 

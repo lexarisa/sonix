@@ -56,7 +56,7 @@ const MyProfile: React.FC = () => {
       bio: bio.value,
     });
 
-    if (res.updated) {
+    if (res) {
       //update in store profile
       dispatch(updateMyBio(bio.value));
       //clear the input and hide it
