@@ -1,8 +1,8 @@
-const app = require('../dist/index');
+const app = require('../index');
 const request = require('supertest');
 const chance = require('chance').Chance();
 // const { dbUrl } = require('../dist/src/models/connection');
-// const mongoose=require('mongoose');
+const mongoose=require('mongoose');
 
 describe('creates user', (done) => {
   // beforeEach(() => {

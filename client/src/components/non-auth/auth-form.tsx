@@ -35,9 +35,7 @@ const AuthForm: React.FC<Props> = ({ title, type }) => {
     if (user.email && user.password) {
       loginUser(user)
         .then((res) => {
-          console.log('RES', res);
           if (res.authenticated) {
-            console.log('LOGGED IN', res);
             localStorage.setItem('accessToken', res.data.token);
             dispatch(login());
             navigate('/');

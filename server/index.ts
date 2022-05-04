@@ -12,7 +12,8 @@ const hostname = 'http://localhost';
 const port = process.env.PORT || 3001;
 
 // init the app
-const app : Express = express();
+export const app : Express = express();
+mongoose.connect(dbUrl);
 
 //configure and add cors
 const corsConfig = {
@@ -36,15 +37,17 @@ app.get('*', (req: Request, res: Response) => {
 });
 
 //connect to db and start the server
-(async function bootstrap() {
-  try {
-    await mongoose.connect(dbUrl);
-    app.listen(port, () => {
+// (async function bootstrap() {
+//   try {
+//     await mongoose.connect(dbUrl);
+//     app.listen(port, () => {
+//       console.log(`Ready on http://${hostname}:${port}/`);
+//     });
+//   } catch (err: unknown) {
+//     if (err instanceof Error)
+//       console.error('Failed to connect to database', err.message);
+//   }
+// })();
+    module.exports=app.listen(port, () => {
       console.log(`Ready on http://${hostname}:${port}/`);
     });
-  } catch (err: unknown) {
-    if (err instanceof Error)
-      console.error('Failed to connect to database', err.message);
-  }
-})();
-module.exports=app;
