@@ -2,8 +2,7 @@ import { combineReducers } from 'redux';
 import { RecipeInterface } from '../interfaces/RecipeInterface';
 import { UserInterface } from '../interfaces/UserInterface';
 
-const authenticated = (loggedIn:boolean = false, action:any) => {
-
+const authenticated = (loggedIn: boolean = false, action: any) => {
   if (action.type === 'LOGIN') {
     const newLoggedIn = true;
     return newLoggedIn;
@@ -17,8 +16,7 @@ const authenticated = (loggedIn:boolean = false, action:any) => {
   return loggedIn;
 };
 
-const profile = (userProfile:UserInterface |{} = {}, action:any) => {
-
+const profile = (userProfile: UserInterface | {} = {}, action: any) => {
   if (action.type === 'SET_USER_PROFILE') {
     const newProfile = action.profile;
     return newProfile;
@@ -47,15 +45,14 @@ const profile = (userProfile:UserInterface |{} = {}, action:any) => {
   if (action.type === 'UPDATE_MY_BIO') {
     return {
       ...userProfile,
-      bio: action.newBio
+      bio: action.newBio,
     };
   }
 
   return userProfile;
 };
 
-const dashboardRecipes = (recipes = {}, action:any) => {
-
+const dashboardRecipes = (recipes = {}, action: any) => {
   if (action.type === 'SET_DASHBOARD_RECIPES') {
     const newDashboardRecipes = action.recipes;
     return newDashboardRecipes;
@@ -63,52 +60,66 @@ const dashboardRecipes = (recipes = {}, action:any) => {
 
   if (action.type === 'STORE_RECIPE') {
     const newDashboardRecipes = JSON.parse(JSON.stringify(recipes));
-    newDashboardRecipes[action.category].push(action.newRecipe);
+    // console.log('newDashBoard', newDashboardRecipes);
+
+    newDashboardRecipes[action.category]
+      ? newDashboardRecipes[action.category].push(action.newRecipe)
+      : (newDashboardRecipes[action.category] = [action.newRecipe]);
     return newDashboardRecipes;
   }
 
   if (action.type === 'LIKE_DASHBOARD_RECIPE') {
     const newDashboardRecipes = JSON.parse(JSON.stringify(recipes));
     //handle category
-    newDashboardRecipes[action.category].map((recipe:RecipeInterface) => {
+    newDashboardRecipes[action.category].map((recipe: RecipeInterface) => {
       if (recipe._id === action.recipeId) {
-        recipe.numberOfLikes++; 
+        recipe.numberOfLikes++;
       }
-    }
-    );
+    });
     //check if in popular also
     if (action.category !== 'Popular') {
-      newDashboardRecipes['Popular'].map((recipe:RecipeInterface) => {
+      newDashboardRecipes['Popular'].map((recipe: RecipeInterface) => {
         if (recipe._id === action.recipeId) {
           recipe.numberOfLikes++;
         }
-      }
+      });
+      newDashboardRecipes['Popular'].sort(
+        (a: RecipeInterface, b: RecipeInterface) =>
+          b.numberOfLikes - a.numberOfLikes
       );
-      newDashboardRecipes['Popular'].sort((a:RecipeInterface, b:RecipeInterface) => b.numberOfLikes - a.numberOfLikes);
     }
 
-    newDashboardRecipes[action.category].sort((a:RecipeInterface, b:RecipeInterface) => b.numberOfLikes - a.numberOfLikes);
+    newDashboardRecipes[action.category].sort(
+      (a: RecipeInterface, b: RecipeInterface) =>
+        b.numberOfLikes - a.numberOfLikes
+    );
     return newDashboardRecipes;
   }
 
   if (action.type === 'UNLIKE_DASHBOARD_RECIPE') {
     const newDashboardRecipes = JSON.parse(JSON.stringify(recipes));
-    newDashboardRecipes[action.category].map((recipe:RecipeInterface) => {
+    newDashboardRecipes[action.category].map((recipe: RecipeInterface) => {
       if (recipe._id === action.recipeId) {
         recipe.numberOfLikes--;
       }
     });
 
     if (action.category !== 'Popular') {
-      newDashboardRecipes['Popular'].map((recipe:RecipeInterface) => {
+      newDashboardRecipes['Popular'].map((recipe: RecipeInterface) => {
         if (recipe._id === action.recipeId) {
           recipe.numberOfLikes--;
         }
       });
-      newDashboardRecipes['Popular'].sort((a:RecipeInterface, b:RecipeInterface) => b.numberOfLikes - a.numberOfLikes);
+      newDashboardRecipes['Popular'].sort(
+        (a: RecipeInterface, b: RecipeInterface) =>
+          b.numberOfLikes - a.numberOfLikes
+      );
     }
 
-    newDashboardRecipes[action.category].sort((a:RecipeInterface, b:RecipeInterface) => b.numberOfLikes - a.numberOfLikes);
+    newDashboardRecipes[action.category].sort(
+      (a: RecipeInterface, b: RecipeInterface) =>
+        b.numberOfLikes - a.numberOfLikes
+    );
     return newDashboardRecipes;
   }
 
@@ -119,7 +130,7 @@ const dashboardRecipes = (recipes = {}, action:any) => {
 const reducers = combineReducers({
   authenticated,
   profile,
-  dashboardRecipes
+  dashboardRecipes,
 });
 
 export default reducers;

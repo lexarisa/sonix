@@ -39,7 +39,11 @@ const AuthenticatedApp = () => {
     //! get the dashboard recipes
 
     getDashboardRecipes()
-      .then((res) => dispatch(setDashboardRecipes(res)))
+      .then((res) => {
+        console.log('res', res);
+        dispatch(setDashboardRecipes(res));
+      })
+
       .catch((error) =>
         console.log('Failed to fetch dashboard recipes: ', error.statusText)
       );

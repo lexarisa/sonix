@@ -67,16 +67,13 @@ const CreateRecipe = () => {
   //! submit the form to firebase/server
   const onSubmit = async (data: FormConstructorRecipeInterface) => {
     //make the document to store
-
     const file: any = data.sampleFile[0];
-
     // check the file is type mp3 or wav
     if (file.type !== 'audio/wav' && file.type !== 'audio/mpeg') {
       setUploadMessage('Audio preview must be of type wav or mp3!');
       return;
       // throw an error
     }
-
     let filename;
     //get the filename
     if (typeof data.sampleFile[0] !== 'string') {
@@ -87,7 +84,6 @@ const CreateRecipe = () => {
       filename += fileId;
       filename += new Date().toLocaleTimeString();
     }
-
     //todo - check if the file exists already or create unique filename for each file?
     //todo - could hash the filename + date???
     //! try to upload the audio to firebase

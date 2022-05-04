@@ -162,8 +162,8 @@ const createRecipe = async (req: Request, res: Response) => {
   // get the recipe from the request body, creator details from req.user
 
   const user = res.locals.user;
-  const recipe = req.body;
 
+  const recipe = req.body;
   recipe.creatorId = user._id;
   recipe.creatorHandle = user.handle;
   try {

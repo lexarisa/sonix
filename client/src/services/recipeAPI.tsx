@@ -79,7 +79,7 @@ const unlikeRecipe = (recipeId: string) => {
 //! post requests
 const createRecipe = (recipe: FormRecipeInterface) => {
   const token = localStorage.getItem('accessToken');
-  console.log('recipe', recipe);
+
   return (
     fetch(`${rootUrl}/recipe/create`, {
       method: 'POST',
@@ -100,7 +100,6 @@ const createRecipe = (recipe: FormRecipeInterface) => {
       //   // else return { created: false, error: res };
       // })
       .catch((error) => {
-        console.log('error caught');
         console.error('Failed to create recipe: ', error);
         return error;
       })

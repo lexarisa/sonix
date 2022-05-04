@@ -39,6 +39,7 @@ const createUser = async (req: Request, res: Response) => {
 };
 
 const loginUser = async (req: Request, res: Response) => {
+  console.log('running');
   // get the email and password
   const { email, password } = req.body;
 
