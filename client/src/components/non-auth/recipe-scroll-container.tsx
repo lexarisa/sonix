@@ -16,9 +16,9 @@ const RecipeScrollContainer: React.FC<{
   return (
     <>
       <div className="outer-container">
-        <h2 onClick={handleClick} className="category-title">
+        <h1 onClick={handleClick} className="category-title">
           {title}
-        </h2>
+        </h1>
 
         <div className="scroll-container">
           {data &&

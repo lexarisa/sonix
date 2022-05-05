@@ -77,6 +77,7 @@ const getDashBoardRecipes = async (req: Request, res: Response) => {
           '_id creatorHandle title numberOfLikes description category originalSynth preview'
         );
     }
+
     // return the result to the user
     res.status(200).send(results);
   } catch (error) {

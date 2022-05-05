@@ -50,7 +50,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.createUser = createUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('RUNNNNNNING');
+    console.log('running');
     // get the email and password
     const { email, password } = req.body;
     try {
