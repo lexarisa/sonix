@@ -55,8 +55,7 @@ const getUserRecipes = async (req: Request, res: Response) => {
 // get recipes for dashboard
 const getDashBoardRecipes = async (req: Request, res: Response) => {
   //create an object ot store the results
-  
-  
+
   try {
     let results: RecipeResultsType = {
       Popular: [],
@@ -74,15 +73,16 @@ const getDashBoardRecipes = async (req: Request, res: Response) => {
       results[cat] = await Recipe.find({ category: cat })
         .sort({ numberOfLikes: -1 })
         .limit(10)
-        .select('_id creatorHandle title numberOfLikes description category originalSynth preview');
+        .select(
+          '_id creatorHandle title numberOfLikes description category originalSynth preview'
+        );
     }
-    // return the result to the user
-   res.status(200).send(results);
 
+    // return the result to the user
+    res.status(200).send(results);
   } catch (error) {
     res.status(500).send({ error, message: 'Failed to get recipes' });
   }
- 
 };
 
 // get recipes by category
@@ -253,7 +253,6 @@ const unLikeRecipe = async (req: Request, res: Response) => {
   // get user and recipe ids
   const userId = res.locals.user._id;
   const { recipeId } = req.params;
-  console.log('user: ', userId, 'recipeId: ', recipeId);
 
   // adjust the number of likes
   try {

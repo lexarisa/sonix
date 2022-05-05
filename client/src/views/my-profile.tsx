@@ -56,8 +56,6 @@ const MyProfile: React.FC = () => {
       bio: bio.value,
     });
 
-    console.log('bio res', res);
-
     if (res) {
       //update in store profile
       dispatch(updateMyBio(bio.value));

@@ -79,25 +79,22 @@ const unlikeRecipe = (recipeId: string) => {
 //! post requests
 const createRecipe = (recipe: FormRecipeInterface) => {
   const token = localStorage.getItem('accessToken');
-  return (
-    fetch(`${rootUrl}/recipe/create`, {
-      method: 'POST',
-      credentials: 'include',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(recipe),
-    })
-      .then((res) => (res.status >= 400 ? Promise.reject(res) : res))
-      .then((res) => res.json())
-      .catch((error) => {
-        console.log('error caught');
-        console.error('Failed to create recipe: ', error);
-        return error;
-      })
-  );
+  return fetch(`${rootUrl}/recipe/create`, {
+    method: 'POST',
+    credentials: 'include',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(recipe),
+  })
+    .then((res) => (res.status >= 400 ? Promise.reject(res) : res))
+    .then((res) => res.json())
+    .catch((error) => {
+      console.error('Failed to create recipe: ', error);
+      return error;
+    });
 };
 
 const getProfileRecipes = (recipeIds: { own: string[]; liked: string[] }) => {

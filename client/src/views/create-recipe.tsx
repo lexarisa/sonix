@@ -67,16 +67,13 @@ const CreateRecipe = () => {
   //! submit the form to firebase/server
   const onSubmit = async (data: FormConstructorRecipeInterface) => {
     //make the document to store
-
     const file: any = data.sampleFile[0];
-
     // check the file is type mp3 or wav
     if (file.type !== 'audio/wav' && file.type !== 'audio/mpeg') {
       setUploadMessage('Audio preview must be of type wav or mp3!');
       return;
       // throw an error
     }
-
     let filename;
     //get the filename
     if (typeof data.sampleFile[0] !== 'string') {
@@ -87,7 +84,6 @@ const CreateRecipe = () => {
       filename += fileId;
       filename += new Date().toLocaleTimeString();
     }
-
     //todo - check if the file exists already or create unique filename for each file?
     //todo - could hash the filename + date???
     //! try to upload the audio to firebase
@@ -127,10 +123,9 @@ const CreateRecipe = () => {
         // } else throw new Error(res.error.message);
       })
       .then((res) => {
-        console.log('RES in create recipe',res);
         dispatch(storeRecipe(res, data.category)); //! THE ERROR IS HERE
-        console.log('RES2 in create recipe',res);
-        dispatch(storeRecipeProfile(res._id));  //! THE ERROR IS HERE
+
+        dispatch(storeRecipeProfile(res._id)); //! THE ERROR IS HERE
         navigate('/recipe', { state: { recipeId: res._id } });
       })
       .catch((err) => {
