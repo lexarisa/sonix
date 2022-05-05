@@ -23,28 +23,28 @@ const Navbar = (): JSX.Element => {
 
         <ul className="nav-links">
           <li className="nav-link">
-            <Link to="/create" className="link">
+            <Link to="/create" className="link create-link">
               <img className="nav-icon" src={Create} alt="login" />
               Create
             </Link>
           </li>
 
           <li className="nav-link">
-            <Link to="/search" className="link">
+            <Link to="/search" className="link search-link">
               <img className="nav-icon" src={Search} alt="login" />
               Search
             </Link>
           </li>
 
           <li className="nav-link">
-            <Link to="/me" className="link">
+            <Link to="/me" className="link profile-link">
               <img className="nav-icon" src={Profile} alt="login" />
               Profile
             </Link>
           </li>
 
           <li className="nav-link" onClick={handleLogout}>
-            <Link to="/" className="link">
+            <Link to="/" className="link logout-link">
               <img className="nav-icon" src={Logout} alt="login" />
               Logout
             </Link>
