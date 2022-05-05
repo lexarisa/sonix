@@ -73,12 +73,13 @@ const getDashBoardRecipes = (req, res) => __awaiter(void 0, void 0, void 0, func
             .limit(10)
             .select('_id creatorHandle title numberOfLikes description category originalSynth preview');
         // get category recipes
-        category_model_1.default.forEach((cat) => __awaiter(void 0, void 0, void 0, function* () {
+        for (const cat of category_model_1.default) {
             results[cat] = yield recipe_model_1.default.find({ category: cat })
                 .sort({ numberOfLikes: -1 })
                 .limit(10)
                 .select('_id creatorHandle title numberOfLikes description category originalSynth preview');
-        }));
+        }
+        console.log(results);
         // return the result to the user
         res.status(200).send(results);
     }
@@ -110,7 +111,7 @@ const getCategoryRecipes = (req, res) => __awaiter(void 0, void 0, void 0, funct
         }
         //if asking for anything else check the category exists
         if (!category_model_1.default.includes(categoryName))
-            throw new Error('1');
+            throw new Error('1'); //!Error could be located here since only pop in dashboard
         //get category recipes - ordered by rating
         const results = yield recipe_model_1.default.find({ category: categoryName })
             .sort({ numberOfLikes: -1 })
@@ -236,7 +237,6 @@ const unLikeRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     // get user and recipe ids
     const userId = res.locals.user._id;
     const { recipeId } = req.params;
-    console.log('user: ', userId, 'recipeId: ', recipeId);
     // adjust the number of likes
     try {
         // check the user and recipe exists
