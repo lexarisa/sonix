@@ -112,11 +112,11 @@ const RecipePreview = ({ recipe }: RecipePreviewProps) => {
         {authenticated && likedRecipes && recipe.creatorHandle !== handle && (
           <>
             {likedRecipes[recipe._id] ? (
-              <button onClick={() => handleLike(false)} className="like-button">
+              <button onClick={() => handleLike(false)} aria-label='like' className="like-button">
                 <img className="like-icon" src={Fav} alt="un-favourite" />
               </button>
             ) : (
-              <button onClick={() => handleLike(true)} className="like-button">
+              <button onClick={() => handleLike(true)} aria-label='like' className="like-button">
                 <img className="like-icon" src={Unfav} alt="favourite" />
               </button>
             )}
